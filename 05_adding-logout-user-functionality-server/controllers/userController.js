@@ -117,6 +117,7 @@ export const getCurrentUser = (req, res) => {
     name: req.user.name,
     email: req.user.email,
     picture: req.user.picture,
+    role: req.user.role,
   });
 };
 
@@ -125,6 +126,15 @@ export const logout = async (req, res) => {
   await Session.findByIdAndDelete(sid);
   res.clearCookie("sid");
   res.status(204).end();
+};
+
+export const logoutById = async (req, res, next) => {
+  try {
+    await Session.deleteMany({ userId: req.params.userId });
+    res.status(204).end();
+  } catch (err) {
+    next(err);
+  }
 };
 
 export const logoutAll = async (req, res) => {
